@@ -80,7 +80,11 @@
   
 
   function main () {
-    nn.get("body").css({backgroundColor: "black"})
+    nn.get("body").css({
+      backgroundColor: "black",
+      backgroundImage: "linear-gradient(90deg, #000 0%, #333 20%, #000 100%)",
+      animation:"slide 2s linear infinite"
+      })
     
     
     // Music Part of the 
