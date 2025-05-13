@@ -82,9 +82,17 @@
   function main () {
     nn.get("body").css({
       backgroundColor: "black",
-      backgroundImage: "linear-gradient(90deg, #000 0%, #333 20%, #000 100%)",
-      animation:"slide 2s linear infinite"
+      backgroundImage: "linear-gradient(90deg, #000 0%, #333 50%, #000 100%)",
+      backgroundSize: "1000% 100%",
+      animation:"slide 4s linear infinite"
       })
+    
+    nn.create("style").content(`
+      @keyframes slide {
+        0% {background-position: 0% 0%;}
+        100% {background-position: 100% 0%;}
+      }
+    `).addTo("head")
     
     
     // Music Part of the 
