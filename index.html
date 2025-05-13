@@ -3,6 +3,12 @@
 <script>
   /* global nn, Tone */
   
+  // The Wandering Pheneoix Element
+  
+  
+  
+  
+  // Music Element of the Work
   let synth
   let synth2
   let started = false
@@ -74,7 +80,10 @@
   
 
   function main () {
+    nn.get("body").css({backgroundColor: "black"})
     
+    
+    // Music Part of the 
     Tone.Transport.bpm.value = 110
     
     new Tone.Loop(base, '8n').start()
