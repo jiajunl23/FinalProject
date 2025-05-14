@@ -26,8 +26,8 @@
     }
   }
   
-  let possible_notes = ["C4", "D4", "E4"]
-  let possible_notes2 = ["F4", "G4", "A4", "B4"]
+  let possible_notes = ["C3", "D3", "E3"]
+  let possible_notes2 = ["F3", "G3", "A3", "B3"]
 
   function base (time) {
     if (times <= 5) {
@@ -70,12 +70,12 @@
   function base2 (time) {
     if (times >= 2 && times % 2 === 0 && times <= 100) {
       const note = possible_notes[nn.randomInt(0, possible_notes.length)]
-      synth2.triggerAttackRelease(note, "4n", time)
+      synth2.triggerAttackRelease(note, "1n", time)
     }
     
     if (times >= 2 && times % 2 === 1 && times <= 100) {
       const note2 = possible_notes2[nn.randomInt(0, possible_notes2.length)]
-      synth2.triggerAttackRelease(note2, "4n", time)
+      synth2.triggerAttackRelease(note2, "1n", time)
     }
   }
   
@@ -101,7 +101,7 @@
     
     new Tone.Loop(base, '4n').start()
     // new Tone.Loop(base, '8n').start()
-    new Tone.Loop(base2, '8n').start()
+    // new Tone.Loop(base2, '2n').start()
     
     let play = nn.create("button")
       .content("Start Playing")
