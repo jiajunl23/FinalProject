@@ -29,41 +29,63 @@
   let possible_notes = ["C3", "D3", "E3"]
   let possible_notes2 = ["F3", "G3", "A3", "B3"]
 
+  
+  let part1 = [["C5"], ["E5"], ["F4"], ["G5"], ["B4"], ["A4"], ["B5"], ["A5"], ["D5"]]
+  let part2 = [["C5", "E4"], ["E5", "B4"], ["F4", "A3"], ["G5", "D4"], ["B4", "C4"], ["A4", "G4"], ["B5", "C4"], ["A5", "D4"], ["D5", "F4"]]
+  let part3 = [["C5", "E4", "A3"], ["E5", "B4", "D3"], ["F4", "A3", "C3"], ["G5", "D4", "B3"], ["B4", "C4", "D3"], ["A4", "G4", "F3"], ["B5", "C4", "A3"], ["A5", "D4", "C3"], ["D5", "F4", "B3"]]
+  let part4 = [["C5", "E4", "A3", "C3"], ["E5", "B4", "D3", "A2"], ["F4", "A3", "C3", "B2"], ["G5", "D4", "B3", "G3"], ["B4", "C4", "D3", "B2"], ["A4", "G4", "F3", "G2"], ["B5", "C4", "A3", "E3"], ["A5", "D4", "C3", "G2"], ["D5", "F4", "B3", "E3"]]
+  let part = []
+  
+  
+  part = part1
+  let count = 0
+  
   function base (time) {
-    if (times <= 2) {
-      synth.triggerAttackRelease(["A4", "A3"], "4n", time)
+    if (times <= 1) {
+      synth.triggerAttackRelease(part[0], "4n", time)
       times += 1
-    } else if (times <= 4) {
-      synth.triggerAttackRelease(["C4", "C3"], "4n", time)
+    } else if (times <= 3) {
+      synth.triggerAttackRelease(part[1], "4n", time)
       times += 1
-    } else if (times <= 6) {
-      synth.triggerAttackRelease(["B4", "B3"], "4n", time)
+    } else if (times <= 5) {
+      synth.triggerAttackRelease(part[2], "4n", time)
       times += 1
-    } else if (times <= 8) {
-      synth.triggerAttackRelease(["A3", "F3"], "4n", time)
-      times += 1
-    }
-    else if (times <= 10) {
-      synth.triggerAttackRelease(["C4", "E4"], "4n", time)
+    } else if (times <= 7) {
+      synth.triggerAttackRelease(part[3], "4n", time)
       times += 1
     }
-    else if (times <= 12) {
-      synth.triggerAttackRelease(["D4", "F3"], "4n", time)
+    else if (times <= 9) {
+      synth.triggerAttackRelease(part[4], "4n", time)
+      times += 1
+    }
+    else if (times <= 11) {
+      synth.triggerAttackRelease(part[5], "4n", time)
+      times += 1
+    }
+    else if (times <= 13) {
+      synth.triggerAttackRelease(part[6], "4n", time)
       times += 1
     }
     else if (times <= 14) {
-      synth.triggerAttackRelease(["E4", "B3"], "4n", time)
-      times += 1
-    }
-    else if (times <= 16) {
-      synth.triggerAttackRelease(["C4", "A3"], "4n", time)
-      times += 1
-    }
-    else if (times <= 18) {
+      synth.triggerAttackRelease(part[7], "4n", time)
       times += 1
     }
     else {
+      synth.triggerAttackRelease(part[8], "4n", time)
       times = 0
+      if (count === 1) {
+        part = part2
+        Tone.Transport.bpm.value = 170
+      }
+      if (count === 3) {
+        part = part3
+        Tone.Transport.bpm.value = 180
+      }
+      if (count === 5) {
+        part = part4
+        Tone.Transport.bpm.value = 190
+      }
+      count += 1
     }
   }
   
@@ -97,11 +119,11 @@
     
     
     // Music Part of the 
-    Tone.Transport.bpm.value = 120
+    Tone.Transport.bpm.value = 150
     
     new Tone.Loop(base, '4n').start()
     // new Tone.Loop(base, '8n').start()
-    new Tone.Loop(base2, '2n').start()
+    // new Tone.Loop(base2, '2n').start()
     
     let play = nn.create("button")
       .content("Start Playing")
