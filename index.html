@@ -3,31 +3,108 @@
 <script>
   /* global nn, Tone */
   
+  const GIF = "pheo3.gif"
+  let GIF_ARRAY = []
+  let ROTATION_DEG = 90
+  
+  function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   // The Wandering Pheneoix Element
+  async function createGIF (x, y, width) {
+    const gif = await nn.loadImage(GIF)
+    GIF_ARRAY.push({obj: nn.create("img")
+                          .set({
+                            src: `${GIF}?desync=${Math.random()}`
+                          })
+                          .css({
+                            position: "absolute",
+                            left: x - gif.width / 2,
+                            top: y - gif.height / 2,
+                            width: width,
+                            imageRendering: "pixelated",
+                            transform: "rotate(90deg)",
+                            transformOrigin: "center center",
+                            transition: "all 1s"
+                          })
+                          .addTo("body"), 
+                  x: x - gif.width / 2, 
+                  y: y - gif.height / 2, 
+                  width: width, 
+                  opacity: 0.8, 
+                  original_width: width})
+
+    const current_length = GIF_ARRAY.length
+
+    GIF_ARRAY[current_length - 1].obj.on("mouseover", () => {
+      const evade_option = Math.round(nn.random(1.3, 2))
+      if (evade_option === 1) {
+        const new_width = Math.max(GIF_ARRAY[current_length - 1].original_width / 3, GIF_ARRAY[current_length - 1].width * 0.9)
+        const new_opacity = new_width / GIF_ARRAY[current_length - 1].original_width * 0.8
+        GIF_ARRAY[current_length - 1].obj.css({
+                                            width: new_width,
+                                            opacity: new_opacity
+                                      })
+        GIF_ARRAY[current_length - 1].width = new_width
+        GIF_ARRAY[current_length - 1].opacity = new_opacity
+      }
+
+      if (evade_option === 2) {
+        const front_or_back = Math.round(nn.random(1, 2))
+        let new_x = GIF_ARRAY[current_length - 1].x
+        if (front_or_back === 1) {
+          new_x -= 100
+        }
+        if (front_or_back === 2) {
+          new_x += 100
+        }
+        GIF_ARRAY[current_length - 1].obj.css({
+                        left: new_x,
+                        })
+        GIF_ARRAY[current_length - 1].x = new_x
+      }
+    })
+  }
   
+  function ph_moves () {
+    const length = GIF_ARRAY.length
+    ROTATION_DEG += nn.random(-0.1, 0.1)
+    for (let i = 0; i < length; i++) {
+      const new_x = Math.max(0, Math.min(nn.width, GIF_ARRAY[i].x + nn.random(-2, 2)))
+      const new_y = Math.max(0, Math.min(nn.height, GIF_ARRAY[i].y + nn.random(-2, 2)))
+      const new_width = Math.min(500, Math.max(GIF_ARRAY[i].original_width / 3, GIF_ARRAY[i].width + nn.random(-2, 2)))
+      const new_opacity = Math.min(1, new_width / GIF_ARRAY[i].original_width * 0.8)
+      GIF_ARRAY[i].obj.css({
+                            left: new_x,
+                            top: new_y,
+                            transform: `rotate(${ROTATION_DEG}deg)`,
+                            width: new_width,
+                            opacity: new_opacity
+                    })
+      GIF_ARRAY[i].x = new_x 
+      GIF_ARRAY[i].y = new_y
+      GIF_ARRAY[i].width = new_width
+    }
+  }
   
+  async function initiation (num, r, center_x, center_y, start, end) {
+    for (let i = 0; i < num; i++) {
+      const x = center_x + Math.cos((end - start) * i / num + start) * r
+      const y = center_y + Math.sin((end - start) * i / num + start) * r
+      await sleep(10)
+      createGIF(x, y, 30)
+    }
+  }
   
   
   // Music Element of the Work
   let synth
   let synth2
-  let started = false
   let times = 0
   
-  function play_stop_music () {
-    if (started) {
-      Tone.Transport.stop()
-      started = false
-      this.innerHTML = "Start Playing"
-    } else {
-      Tone.Transport.start()
-      started = true
-      this.innerHTML = "Stop Playing"
-    }
-  }
-  
-  let possible_notes = ["C5", "D5", "E5"]
-  let possible_notes2 = ["F5", "G5", "A5", "B5"]
+  let possible_notes = ["C4", "D4", "E4"]
+  let possible_notes2 = ["F4", "G4", "A4", "B4"]
 
   
   let part1 = [["C5"], ["E5"], ["F4"], ["G5"], ["B4"], ["A4"], ["B5"], ["A5"], ["D5"]]
@@ -39,7 +116,7 @@
   
   
   part = part1
-  let count = 0
+  let phase = 0
   
   function base (time) {
     if (times <= 1) {
@@ -74,29 +151,29 @@
     else {
       synth.triggerAttackRelease(part[8], "4n", time)
       times = 0
-      if (count === 1) {
+      if (phase === 1) {
         part = part2
         Tone.Transport.bpm.value = 170
       }
-      if (count === 3) {
+      if (phase === 3) {
         part = part3
         Tone.Transport.bpm.value = 180
       }
-      if (count === 5) {
+      if (phase === 5) {
         part = part4
         Tone.Transport.bpm.value = 190
       }
-      count += 1
+      phase += 1
     }
   }
   
   function base2 (time) {
-    if (count >= 5 && times % 4 === 0) {
+    if (phase >= 5 && times % 4 === 0) {
       const note = possible_notes[nn.randomInt(0, possible_notes.length)]
       synth2.triggerAttackRelease(note, "1n", time)
     }
     
-    if (count >= 7 && times % 4 === 2) {
+    if (phase >= 7 && times % 4 === 2) {
       const note2 = possible_notes2[nn.randomInt(0, possible_notes2.length)]
       synth2.triggerAttackRelease(note2, "1n", time)
     }
@@ -126,87 +203,28 @@
     // new Tone.Loop(base, '8n').start()
     new Tone.Loop(base2, '4n').start()
     
-    let play = nn.create("button")
-      .content("Start Playing")
-      .css({
-      borderRadius: "40%",
-      width: "100px",
-      height: "100px",
-      display: "flex",
-      position: "absolute",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "20px",
-      top: nn.height / 2 - 50,
-      left: nn.width / 2 - 50,
-      color: "#FFCBA4",
-      backgroundColor: "white",
-      transition: "all 0.5s"
-    })
-      .addTo("body")
-      
-    play.on('click', play_stop_music, play)
-
-    play.on("mouseover", () => {
-      play.css({
-        backgroundColor: "#FFB6C1",
-        color: "yellow",
-        width: "120px",
-        height: "120px",
-        top: nn.height / 2 - 60,
-        left: nn.width / 2 - 60
-      })
-    })
-
-    play.on("mouseout", () => {
-      play.css({
-        backgroundColor: "white",
-        color: "#FFCBA4",
-        width: "100px",
-        height: "100px",
-        top: nn.height / 2 - 50,
-        left: nn.width / 2 - 50
-      })
-    })
-    
-    const vibrato = new Tone.LFO({
-      frequncy: 5,
-      min: -15,
-      max: 15,
-      type: "sine"
-    }).start()
+    Tone.Transport.start()
 
     synth = new Tone.PolySynth({
       volume: -10,
       oscillator: {
-        type: 'sawtooth'
+        type: 'triangle'
       },
       envelope: {
-        attack: 0.4,
+        attack: 0.02,
         decay: 0.1,
-        sustain: 0.7,
-        release: 0.8,
-        attackCurve: "sine"
-      },
-      filter: {
-        type: "lowpass",
-        frequency: 2000,
-        Q: 1
-      },
-      filterEnvelope: {
-        attack: 0.2,
-        decay: 0.3,
-        sustain: 0.5,
-        release: 0.8,
-        baseFrequency: 200,
-        ocataves: 3
-      },
-      detune: vibrato
+        sustain: 0.3,
+        release: 1
+      }
     }).toDestination()
     
-    
-    const reverb = new Tone.Reverb(2).toDestination()
+    const reverb = new Tone.Reverb(1.5).toDestination()
     synth.connect(reverb)
+    
+    let center_x = Math.max(0, (nn.width - nn.height) / 2)
+    let center_y = nn.height / 2
+    initiation(20, nn.height / 2, center_x, center_y, - Math.PI / 6, Math.PI / 6)
+    setInterval(ph_moves, 1000 / 120)
     
     const vibrato2 = new Tone.LFO({
       frequncy: 5,
