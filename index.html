@@ -21,6 +21,7 @@
   
   let possible_notes = ["C4", "D4", "E4"]
   let possible_notes2 = ["F4", "G4", "A4", "B4"]
+  let color_strings = []
 
   
   let part1 = [["C5"], ["E5"], ["F4"], ["G5"], ["B4"], ["A4"], ["B5"], ["A5"], ["D5"]]
@@ -105,6 +106,7 @@
           height: "50px",
           filter: "brightness(0.1)"
         })
+        continuous_erase()
       }
       if (phase === 9) {
         part = part5
@@ -142,14 +144,34 @@
     for (let i = 0; i < new_add_colors; i++) {
       color_string = color_string + `, radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, 1) 0%, transparent ${size}%)`
     }
+    color_strings.push(color_string)
     nn.get("body").css({backgroundImage: color_string})
   }
   
   async function continuous_change (new_add_colors, size) {
     for (let i = 0; i < new_add_colors; i++) {
       await sleep(sleeptime)
-      change_color(1, size)
+      change_color(1, size) 
+      if (phase >= 7) {
+        console.log("reaching breaking point")
+        break
+      }
     }
+    console.log("break")
+  }
+  
+  async function continuous_erase() {
+    for (let i = color_strings.length - 1; i >= 1; i--) {
+      await sleep(1000)
+      color_string = color_strings[i]
+      nn.get("body").css({backgroundImage: color_string})
+    }
+    await sleep(1000)
+    change_color(1, 70)
+    await sleep(1000)
+    change_color(1, 70)
+    await sleep(1000)
+    change_color(1, 70)
   }
   
   
