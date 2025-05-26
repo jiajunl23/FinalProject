@@ -110,6 +110,26 @@
     }
   }
   
+  let spirit = 0
+  
+  function spirit_moves () {
+    const new_x = Math.max(0, Math.min(nn.width, spirit.left + nn.random(-10, 10)))
+    const new_y = Math.max(0, Math.min(nn.height, spirit.top + nn.random(-10, 10)))
+    // console.log(new_y)
+    const new_width = Math.min(500, Math.max(200 / 3, spirit.width + nn.random(0, 0.00025)))
+    const new_opacity = Math.min(1, new_width / 200 * 0.8)
+    spirit.obj.css({
+                left: new_x,
+                top: new_y,
+                width: new_width,
+                height: new_width,
+                opacity: new_opacity
+              })
+    spirit.left = new_x
+    spirit.top = new_y
+    spirit.width = new_width
+  }
+  
 
   async function main () {
     
@@ -183,19 +203,25 @@
     const reverb2 = new Tone.Reverb(2).toDestination()
     synth2.connect(reverb2)
     
-    const figure = nn.create("div").css({
-      width: "200px",
-      height: "200px",
+    spirit = {obj: nn.create("div").css({
+      width: "50px",
+      height: "50px",
       borderRadius: "50%",
-      backgroundColor: "blue",
+      backgroundColor: "rgba(100, 100, 200, 1)",
       position: "absolute",
-      top: nn.height / 2 - 100,
-      left: nn.width / 2 - 100,
-      opacity: 0.2
-    }).addTo("body")
+      top: nn.height / 2 - 25,
+      left: nn.width / 2 - 25,
+      opacity: 1,
+      transformOrigin: "center center",
+      transition: "all 1s"
+    }).addTo("body"), 
+      top: nn.height / 2 - 25,
+      left: nn.width / 2 - 25,
+      width: 50}
     
     
     
+    setInterval(spirit_moves, 1000 / 240)
 
   }
 
