@@ -57,12 +57,61 @@
   let part4 = [["C5", "E4", "A3", "C3"], ["E5", "B4", "D3", "A2"], ["F4", "A3", "C3", "B2"], ["G5", "D4", "B3", "G3"], ["B4", "C4", "D3", "B2"], ["A4", "G4", "F3", "G2"], ["B5", "C4", "A3", "E3"], ["A5", "D4", "C3", "G2"], ["D5", "F4", "B3", "E3"]]
   let part = []
   
-  let part5 = [["C4"], ["E4"], ["F3"], ["G4"], ["B3"], ["A4"], ["B4"], ["A4"], ["D4"]]
+  let part5 = [["C4"], ["E4"], ["F3"], ["G4"], ["B3"], ["A4"], ["E4", "C4"], ["B4", "G4"], ["A4", "F4"]]
   
-  let sleeptime = 2000
+  let part6 = [["F4", "D4"], ["E4", "G4"], ["A4", "C4"], ["B4", "D4"], ["C5"], ["C5"], ["C5"], ["C5"], ["C5"]]
   
   part = part1
   let phase = 0
+  
+  let sleeptime = 2000
+  
+  let color_string = "radial-gradient(circle at 50% 50%, rgba(100, 100, 200, 1) 0%, transparent 50%)"
+  
+  function change_color (new_add_colors, size) {
+    for (let i = 0; i < new_add_colors; i++) {
+      color_string = color_string + `, radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, 1) 0%, transparent ${size}%)`
+    }
+    color_strings.push(color_string)
+    nn.get("body").css({backgroundImage: color_string})
+  }
+  
+  async function continuous_change (new_add_colors, size) {
+    for (let i = 0; i < new_add_colors; i++) {
+      await sleep(sleeptime)
+      change_color(1, size) 
+      if (phase >= 7) {
+        console.log("reaching breaking point")
+        break
+      }
+    }
+    console.log("break")
+  }
+  
+  async function continuous_erase() {
+    for (let i = color_strings.length - 1; i >= 0; i--) {
+      await sleep(500)
+      color_string = color_strings[i]
+      nn.get("body").css({backgroundImage: color_string})
+    }
+    await sleep(1000)
+    color_string = color_string + `, radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 100)}, ${nn.randomInt(200, 255)}, ${nn.randomInt(0, 100)}, 1) 0%, transparent 70%)`
+    nn.get("body").css({backgroundImage: color_string})
+    await sleep(1000)
+    spirit.css({
+          width: "100px",
+          height: "100px",
+          filter: "brightness(1)"
+        })
+    change_color(1, 70)
+    await sleep(1000)
+    change_color(1, 70)
+    await sleep(1000)
+    change_color(1, 70)
+    await sleep(1000)
+    change_color(1, 70)
+  }
+  
   
   function base (time) {
     if (times <= 1) {
@@ -146,6 +195,9 @@
           filter: "brightness(1)"
         })
       }
+      if (phase === 12) {
+        part = part6
+      }
       if (phase === 13) {
         Tone.Transport.stop()
       }
@@ -165,50 +217,6 @@
     }
   }
   
-  let color_string = "radial-gradient(circle at 50% 50%, rgba(100, 100, 200, 1) 0%, transparent 50%)"
-  
-  function change_color (new_add_colors, size) {
-    for (let i = 0; i < new_add_colors; i++) {
-      color_string = color_string + `, radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, 1) 0%, transparent ${size}%)`
-    }
-    color_strings.push(color_string)
-    nn.get("body").css({backgroundImage: color_string})
-  }
-  
-  async function continuous_change (new_add_colors, size) {
-    for (let i = 0; i < new_add_colors; i++) {
-      await sleep(sleeptime)
-      change_color(1, size) 
-      if (phase >= 7) {
-        console.log("reaching breaking point")
-        break
-      }
-    }
-    console.log("break")
-  }
-  
-  async function continuous_erase() {
-    for (let i = color_strings.length - 1; i >= 0; i--) {
-      await sleep(500)
-      color_string = color_strings[i]
-      nn.get("body").css({backgroundImage: color_string})
-    }
-    await sleep(1000)
-    color_string = `radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 100)}, ${nn.randomInt(200, 255)}, ${nn.randomInt(0, 100)}, 1) 0%, transparent 70%)`
-    await sleep(1000)
-    spirit.css({
-          width: "100px",
-          height: "100px",
-          filter: "brightness(1)"
-        })
-    change_color(1, 70)
-    await sleep(1000)
-    change_color(1, 70)
-    await sleep(1000)
-    change_color(1, 70)
-    await sleep(1000)
-    change_color(1, 70)
-  }
   
   
   function spirit_moves () {
