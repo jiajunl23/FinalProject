@@ -94,6 +94,9 @@
           filter: "brightness(0.1)"
         })
       }
+      if (phase === 10) {
+        Tone.Transport.stop()
+      }
       phase += 1
     }
   }
