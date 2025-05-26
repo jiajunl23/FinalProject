@@ -7,7 +7,6 @@
   // Youth Day of China:
   // 
   // https://www.bilibili.com/video/BV15kVJzYE5N/?share_source=copy_web&vd_source=812f143e8e5454a681f5521574246f0f
-  
   // The video is completely in Mandarin so I will briefly summaries the 
   // content of the video that inspired me:
   
@@ -16,7 +15,6 @@
   // the fear and worry for failure, for uncertainty, for instability, for the 
   // indeterminstic of individual fate in the huge change in environment has 
   // lead to the diminishing of courage and individual character. 
-  
   // The video points out that it is not the youth's fault, but instead, it is the
   // vast amount of information that you could get through the digital media
   // far exceeds before
@@ -127,28 +125,28 @@
       }
       if (phase === 7) {
         part = part3
-        Tone.Transport.bpm.value = 160
-        sleeptime = 500
-        opacity_center = 0.3
-        spirit.css({
-          width: "50px",
-          height: "50px",
-          filter: "brightness(0.1)"
-        })
+        Tone.Transport.bpm.value = 180
+        opacity_center = 0.5
         continuous_erase()
       }
       if (phase === 9) {
-        part = part5
-        Tone.Transport.bpm.value = 120
+        part = part2
+        Tone.Transport.bpm.value = 160
         sleeptime = 500
-        opacity_center = 0.3
-        spirit.css({
-          width: "50px",
-          height: "50px",
-          filter: "brightness(0.1)"
-        })
+        opacity_center = 0.7
       }
       if (phase === 11) {
+        part = part5
+        Tone.Transport.bpm.value = 130
+        sleeptime = 500
+        opacity_center = 0.8
+        spirit.css({
+          width: "100px",
+          height: "100px",
+          filter: "brightness(1)"
+        })
+      }
+      if (phase === 13) {
         Tone.Transport.stop()
       }
       phase += 1
@@ -191,7 +189,7 @@
   
   async function continuous_erase() {
     for (let i = color_strings.length - 1; i >= 0; i--) {
-      await sleep(1000)
+      await sleep(500)
       color_string = color_strings[i]
       nn.get("body").css({backgroundImage: color_string})
     }
