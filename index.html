@@ -25,7 +25,7 @@
   let part4 = [["C5", "E4", "A3", "C3"], ["E5", "B4", "D3", "A2"], ["F4", "A3", "C3", "B2"], ["G5", "D4", "B3", "G3"], ["B4", "C4", "D3", "B2"], ["A4", "G4", "F3", "G2"], ["B5", "C4", "A3", "E3"], ["A5", "D4", "C3", "G2"], ["D5", "F4", "B3", "E3"]]
   let part = []
   
-  
+  let sleeptime = 1000
   
   part = part1
   let phase = 0
@@ -66,14 +66,17 @@
       if (phase === 1) {
         part = part2
         Tone.Transport.bpm.value = 170
+        continuous_change(50, 20)
       }
       if (phase === 3) {
         part = part3
         Tone.Transport.bpm.value = 180
+        sleeptime = 100
       }
       if (phase === 5) {
         part = part4
         Tone.Transport.bpm.value = 190
+        
       }
       phase += 1
     }
@@ -91,19 +94,30 @@
     }
   }
   
+  let color_string = "radial-gradient(circle at 50% 50%, rgba(100, 100, 200, 1) 0%, transparent 50%)"
+  
+  function change_color (new_add_colors, size) {
+    for (let i = 0; i < new_add_colors; i++) {
+      color_string = color_string + `, radial-gradient(circle at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, 1) 0%, transparent ${size}%)`
+    }
+    nn.get("body").css({backgroundImage: color_string})
+  }
+  
+  async function continuous_change (new_add_colors, size) {
+    for (let i = 0; i < new_add_colors; i++) {
+      await sleep(sleeptime)
+      change_color(1, size)
+    }
+  }
+  
 
-  function main () {
+  async function main () {
+    
     nn.get("body").css({
-    backgroundImage: "radial-gradient(circle at 30% 40%, rgba(255,0,100,0.6), transparent 40%), radial-gradient(circle at 70% 60%, rgba(0,150,255,0.5), transparent 50%)"
+      minHeight: "100vh",
+      backgroundImage: color_string
     })
-    
-    // nn.create("style").content(`
-    //   @keyframes slide {
-    //     0% {background-position: 0% 0%;}
-    //     100% {background-position: 100% 0%;}
-    //   }
-    // `).addTo("head")
-    
+
     
     // Music Part of the 
     Tone.Transport.bpm.value = 150
@@ -168,13 +182,6 @@
     const reverb2 = new Tone.Reverb(2).toDestination()
     synth2.connect(reverb2)
     
-    
-    // nn.get("body").css({
-    //   backgroundImage: `
-    //     radial-gradient(circle at 10% 30%, rgba(100, 100, 200, 0.9) 0%, transparent 70%),
-    //     radial-gradient(circle at 50% 70%, rgba(100, 100, 200, 0.9) 0%, transparent 70%)
-    //   `
-    // })
 
   }
 
