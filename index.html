@@ -1,6 +1,35 @@
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js?v=10"></script>
 <script src="https://unpkg.com/tone"></script>
 <script>
+  
+  // This project is inspired by 
+  // a video made by bilibili dedicated to celebrating the 
+  // Youth Day of China:
+  // 
+  // https://www.bilibili.com/video/BV15kVJzYE5N/?share_source=copy_web&vd_source=812f143e8e5454a681f5521574246f0f
+  
+  // The video is completely in Mandarin so I will briefly summaries the 
+  // content of the video that inspired me:
+  
+  // The video presented a fact that currently the Youth suffers from 
+  // worry, anxiety, and fear:
+  // the fear and worry for failure, for uncertainty, for instability, for the 
+  // indeterminstic of individual fate in the huge change in environment has 
+  // lead to the diminishing of courage and individual character. 
+  
+  // The video points out that it is not the youth's fault, but instead, it is the
+  // vast amount of information that you could get through the digital media
+  // far exceeds before
+  // People's mind has not been adapted to this huge influx of information, 
+  // that it destroys your thoughts, your focus, and amplifies your natural instinct
+  // to avoid failures.
+  
+  // I wanted to make this project because when I was watching this video,
+  // as a third year, I am constantly worrying about my future paths. 
+  // This video provided an angle that it is not the lack of opportunity that
+  // gives me the anxiety, but it is actually the vast amount of 
+  // information/possible opportunities that I worrying that I might miss.
+  
   /* global nn, Tone */
   
   function sleep (ms) {
@@ -161,11 +190,20 @@
   }
   
   async function continuous_erase() {
-    for (let i = color_strings.length - 1; i >= 1; i--) {
+    for (let i = color_strings.length - 1; i >= 0; i--) {
       await sleep(1000)
       color_string = color_strings[i]
       nn.get("body").css({backgroundImage: color_string})
     }
+    await sleep(1000)
+    color_string = `radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 100)}, ${nn.randomInt(200, 255)}, ${nn.randomInt(0, 100)}, 1) 0%, transparent 70%)`
+    await sleep(1000)
+    spirit.css({
+          width: "100px",
+          height: "100px",
+          filter: "brightness(1)"
+        })
+    change_color(1, 70)
     await sleep(1000)
     change_color(1, 70)
     await sleep(1000)
