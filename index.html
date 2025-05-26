@@ -115,10 +115,11 @@
     
     nn.get("body").css({
       minHeight: "100vh",
-      backgroundImage: color_string
+      backgroundImage: color_string,
+      filter: "contrast(1.5) saturate(2)"
     })
 
-    continuous_change(100, 25)
+    continuous_change(50, 30)
     // Music Part of the 
     Tone.Transport.bpm.value = 150
     
@@ -181,6 +182,19 @@
     
     const reverb2 = new Tone.Reverb(2).toDestination()
     synth2.connect(reverb2)
+    
+    const figure = nn.create("div").css({
+      width: "200px",
+      height: "200px",
+      borderRadius: "50%",
+      backgroundColor: "blue",
+      position: "absolute",
+      top: nn.height / 2 - 100,
+      left: nn.width / 2 - 100,
+      opacity: 0.2
+    }).addTo("body")
+    
+    
     
 
   }
