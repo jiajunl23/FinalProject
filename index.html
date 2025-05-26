@@ -12,7 +12,6 @@
   let current_width = 0
   let spirit = 0
   let play = 0
-  let stop = 0
   
   
   // Music Element of the Work
@@ -29,6 +28,8 @@
   let part3 = [["C5", "E4", "A3"], ["E5", "B4", "D3"], ["F4", "A3", "C3"], ["G5", "D4", "B3"], ["B4", "C4", "D3"], ["A4", "G4", "F3"], ["B5", "C4", "A3"], ["A5", "D4", "C3"], ["D5", "F4", "B3"]]
   let part4 = [["C5", "E4", "A3", "C3"], ["E5", "B4", "D3", "A2"], ["F4", "A3", "C3", "B2"], ["G5", "D4", "B3", "G3"], ["B4", "C4", "D3", "B2"], ["A4", "G4", "F3", "G2"], ["B5", "C4", "A3", "E3"], ["A5", "D4", "C3", "G2"], ["D5", "F4", "B3", "E3"]]
   let part = []
+  
+  let part5 = [["C4"], ["E4"], ["F3"], ["G4"], ["B3"], ["A4"], ["B4"], ["A4"], ["D4"]]
   
   let sleeptime = 2000
   
@@ -94,7 +95,29 @@
           filter: "brightness(0.1)"
         })
       }
-      if (phase === 10) {
+      if (phase === 7) {
+        part = part3
+        Tone.Transport.bpm.value = 160
+        sleeptime = 500
+        opacity_center = 0.3
+        spirit.css({
+          width: "50px",
+          height: "50px",
+          filter: "brightness(0.1)"
+        })
+      }
+      if (phase === 9) {
+        part = part5
+        Tone.Transport.bpm.value = 120
+        sleeptime = 500
+        opacity_center = 0.3
+        spirit.css({
+          width: "50px",
+          height: "50px",
+          filter: "brightness(0.1)"
+        })
+      }
+      if (phase === 11) {
         Tone.Transport.stop()
       }
       phase += 1
@@ -102,12 +125,12 @@
   }
   
   function base2 (time) {
-    if (phase >= 5 && times % 4 === 0) {
+    if (phase >= 5 && times % 4 === 0 && phase <= 7) {
       const note = possible_notes[nn.randomInt(0, possible_notes.length)]
       synth2.triggerAttackRelease(note, "1n", time)
     }
     
-    if (phase >= 7 && times % 4 === 2) {
+    if (phase >= 5 && times % 4 === 2 && phase <= 7) {
       const note2 = possible_notes2[nn.randomInt(0, possible_notes2.length)]
       synth2.triggerAttackRelease(note2, "1n", time)
     }
@@ -160,7 +183,7 @@
   async function main () {
     play.remove()
     
-    stop = nn.create("button")
+    let stop = nn.create("button")
       .content("Stop")
       .css({
       borderRadius: "40%",
