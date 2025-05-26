@@ -90,6 +90,9 @@
           width: "50px",
           height: "50px"
         })
+        nn.get("body").css({
+          filter: "contrast(1.5) saturate(2) brightness(0.1)"
+        })
       }
       phase += 1
     }
@@ -125,8 +128,8 @@
   
   
   function spirit_moves () {
-    const new_x = Math.max(0, Math.min(nn.width, parseInt(spirit.style.left) + nn.randomInt(-10, 10)))
-    const new_y = Math.max(0, Math.min(nn.height, parseInt(spirit.style.top) + nn.randomInt(-10, 10)))
+    const new_x = Math.max(0, Math.min(nn.width - 50, parseInt(spirit.style.left) + nn.randomInt(-10, 10)))
+    const new_y = Math.max(0, Math.min(nn.height - 50, parseInt(spirit.style.top) + nn.randomInt(-10, 10)))
     spirit.css({
                 left: new_x,
                 top: new_y,
@@ -236,14 +239,16 @@
         top 1s,
         left 1s,
         opacity 1s,
-        width 5s,
-        height 1s
+        width 10s,
+        height 10s,
+        filter 10s
       `
     }).addTo("body")
     
     
     setInterval(spirit_moves, 1000 / 240)
     setInterval(spirit_beat, 1000)
+    
 
   }
 
