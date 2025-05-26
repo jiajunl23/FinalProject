@@ -25,7 +25,7 @@
   let part4 = [["C5", "E4", "A3", "C3"], ["E5", "B4", "D3", "A2"], ["F4", "A3", "C3", "B2"], ["G5", "D4", "B3", "G3"], ["B4", "C4", "D3", "B2"], ["A4", "G4", "F3", "G2"], ["B5", "C4", "A3", "E3"], ["A5", "D4", "C3", "G2"], ["D5", "F4", "B3", "E3"]]
   let part = []
   
-  let sleeptime = 1000
+  let sleeptime = 2000
   
   part = part1
   let phase = 0
@@ -66,17 +66,17 @@
       if (phase === 1) {
         part = part2
         Tone.Transport.bpm.value = 170
-        continuous_change(50, 20)
+        sleeptime = 2000
       }
       if (phase === 3) {
         part = part3
         Tone.Transport.bpm.value = 180
-        sleeptime = 100
+        sleeptime = 1000
       }
       if (phase === 5) {
         part = part4
         Tone.Transport.bpm.value = 190
-        
+        sleeptime = 500
       }
       phase += 1
     }
@@ -98,7 +98,7 @@
   
   function change_color (new_add_colors, size) {
     for (let i = 0; i < new_add_colors; i++) {
-      color_string = color_string + `, radial-gradient(circle at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, 1) 0%, transparent ${size}%)`
+      color_string = color_string + `, radial-gradient(ellipse at ${nn.randomInt(0, 100)}% ${nn.randomInt(0, 100)}%, rgba(${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, ${nn.randomInt(0, 255)}, 1) 0%, transparent ${size}%)`
     }
     nn.get("body").css({backgroundImage: color_string})
   }
@@ -118,7 +118,7 @@
       backgroundImage: color_string
     })
 
-    
+    continuous_change(100, 25)
     // Music Part of the 
     Tone.Transport.bpm.value = 150
     
