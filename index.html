@@ -6,8 +6,11 @@
   function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
   }
-
- 
+  
+  let opacity_center = 0.8
+  let opacity_large = true
+  let current_width = 0
+  let spirit = 0
   
   
   // Music Element of the Work
@@ -72,11 +75,21 @@
         part = part3
         Tone.Transport.bpm.value = 180
         sleeptime = 1000
+        opacity_center = 0.6
+        spirit.css({
+          width: "80px",
+          height: "80px"
+        })
       }
       if (phase === 5) {
         part = part4
         Tone.Transport.bpm.value = 190
         sleeptime = 500
+        opacity_center = 0.3
+        spirit.css({
+          width: "50px",
+          height: "50px"
+        })
       }
       phase += 1
     }
@@ -110,24 +123,31 @@
     }
   }
   
-  let spirit = 0
   
   function spirit_moves () {
-    const new_x = Math.max(0, Math.min(nn.width, spirit.left + nn.random(-10, 10)))
-    const new_y = Math.max(0, Math.min(nn.height, spirit.top + nn.random(-10, 10)))
-    // console.log(new_y)
-    const new_width = Math.min(500, Math.max(200 / 3, spirit.width + nn.random(0, 0.00025)))
-    const new_opacity = Math.min(1, new_width / 200 * 0.8)
-    spirit.obj.css({
+    const new_x = Math.max(0, Math.min(nn.width, parseInt(spirit.style.left) + nn.randomInt(-10, 10)))
+    const new_y = Math.max(0, Math.min(nn.height, parseInt(spirit.style.top) + nn.randomInt(-10, 10)))
+    spirit.css({
                 left: new_x,
                 top: new_y,
-                width: new_width,
-                height: new_width,
-                opacity: new_opacity
               })
-    spirit.left = new_x
-    spirit.top = new_y
-    spirit.width = new_width
+  }
+  
+  
+  function spirit_beat () {
+    if (opacity_large) {
+      current_width = spirit.style.width
+      spirit.css({
+        opacity: opacity_center - 0.1
+      })
+      opacity_large = false
+    } else {
+      current_width = spirit.style.width
+      spirit.css({
+        opacity: opacity_center + 0.1
+      })
+      opacity_large = true
+    }
   }
   
 
@@ -203,25 +223,27 @@
     const reverb2 = new Tone.Reverb(2).toDestination()
     synth2.connect(reverb2)
     
-    spirit = {obj: nn.create("div").css({
-      width: "50px",
-      height: "50px",
+    spirit = nn.create("div").css({
+      width: "100px",
+      height: "100px",
       borderRadius: "50%",
-      backgroundColor: "rgba(100, 100, 200, 1)",
+      backgroundColor: "rgba(100, 100, 200, 0.8)",
       position: "absolute",
       top: nn.height / 2 - 25,
       left: nn.width / 2 - 25,
       opacity: 1,
-      transformOrigin: "center center",
-      transition: "all 1s"
-    }).addTo("body"), 
-      top: nn.height / 2 - 25,
-      left: nn.width / 2 - 25,
-      width: 50}
-    
+      transition: `
+        top 1s,
+        left 1s,
+        opacity 1s,
+        width 5s,
+        height 1s
+      `
+    }).addTo("body")
     
     
     setInterval(spirit_moves, 1000 / 240)
+    setInterval(spirit_beat, 1000)
 
   }
 
