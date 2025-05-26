@@ -94,18 +94,15 @@
 
   function main () {
     nn.get("body").css({
-      backgroundColor: "black",
-      backgroundImage: "linear-gradient(110deg, #000 0%, #333 50%, #000 100%)",
-      backgroundSize: "800% 100%",
-      animation:"slide 4s linear infinite"
-      })
+    backgroundImage: "radial-gradient(circle at 30% 40%, rgba(255,0,100,0.6), transparent 40%), radial-gradient(circle at 70% 60%, rgba(0,150,255,0.5), transparent 50%)"
+    })
     
-    nn.create("style").content(`
-      @keyframes slide {
-        0% {background-position: 0% 0%;}
-        100% {background-position: 100% 0%;}
-      }
-    `).addTo("head")
+    // nn.create("style").content(`
+    //   @keyframes slide {
+    //     0% {background-position: 0% 0%;}
+    //     100% {background-position: 100% 0%;}
+    //   }
+    // `).addTo("head")
     
     
     // Music Part of the 
@@ -170,6 +167,14 @@
     
     const reverb2 = new Tone.Reverb(2).toDestination()
     synth2.connect(reverb2)
+    
+    
+    // nn.get("body").css({
+    //   backgroundImage: `
+    //     radial-gradient(circle at 10% 30%, rgba(100, 100, 200, 0.9) 0%, transparent 70%),
+    //     radial-gradient(circle at 50% 70%, rgba(100, 100, 200, 0.9) 0%, transparent 70%)
+    //   `
+    // })
 
   }
 
